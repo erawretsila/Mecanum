@@ -1,0 +1,157 @@
+use <MMMotor.scad>;
+module Fixings(w,l,t,dia=3){
+    translate([-w/2,-l/2,0]){
+        cylinder(t,d=dia);
+    }
+    translate([w/2,-l/2,0]){
+        cylinder(t,d=dia);
+    }
+    translate([-w/2,l/2,0]){
+        cylinder(t,d=dia);
+    }
+    translate([w/2,l/2,0]){
+        cylinder(t,d=dia);
+    }
+}
+module WheelMotor(A=45){
+    translate([-.5,0,0]){
+        MMMotor();
+        translate([-3,0,0]){
+            Mecanum(Angle=A);
+        }
+        rotate([180,0,0]){
+            MotorMountH();
+            MotorMountF();
+        }
+    }
+}
+module DriveTrain(l=50,w=60){
+    translate([-w/2,0,-6]){
+        translate([0,-l/2,0]){
+            translate([0,0,0]){
+                WheelMotor();
+            }
+            translate([0,l,0]){
+                WheelMotor(-45);
+            }
+        }
+        translate([w,0,0]){
+            rotate([0,0,180]){
+                translate([0,-l/2,0]){
+                    translate([0,0,0]){
+                        WheelMotor();
+                    }
+                    translate([0,l,0]){
+                        WheelMotor(-45);
+                    }
+                }
+            }
+        }
+    }
+}
+module Chassis(w,l,T=3){
+    difference(){
+        union(){
+            translate([-w/2,-l/2,0]){
+                cube([w,l,T]);
+            }
+            translate([-65/2,-75/2,0]){
+                cube([65,75,7]);
+            }
+            translate([-(w-20)/2,l/2-8,0]){
+                cube([w-20,6,17+T]);
+            }
+            translate([-(w-20)/2,-l/2+2,0]){
+                cube([w-20,6,17+T]);
+            }
+                
+        }
+        
+        rotate([180,0,0]){
+            translate([0,0,-(18+T)]){
+                BatBox4AA();
+            }
+        }
+        translate([(w/2)-15,(l/2)-5,0]){
+            cylinder(60,d=2.5,$fn=12);
+        }
+        translate([-(w/2)+15,(l/2)-5,0]){
+            cylinder(60,d=2.5,$fn=12);
+        }
+        translate([(w/2)-15,-(l/2)+5,0]){
+            cylinder(60,d=2.5,$fn=12);
+        }
+        translate([-(w/2)+15,-(l/2)+5,0]){
+            cylinder(60,d=2.5,$fn=12);
+        }
+    }
+}
+//WheelMotor();
+module PiPlate(w,l,t){
+    difference(){
+        union(){
+            translate([-w/2,-l/2,0]){
+                cube([w,l,t]);
+            }
+            translate([0,15-l/2,0]){
+                Fixings(58,23,6,dia=7);
+            }
+            translate([-12/2,l/4,10]){
+                minkowski(){
+                    cube([12,3,5+t]);
+                    rotate([90,0,0]){
+                        cylinder(3,r=10);
+                    }
+                }
+            }
+            translate([-12/2,-l/4+14,10]){
+                minkowski(){
+                    cube([12,5,5+t]);
+                    rotate([90,0,0]){
+                        cylinder(10,r=10);
+                    }
+                }
+            }
+        }
+        translate([-w/2,-l/2,15]){
+            cube([w,l,30]);
+        }
+        translate([-w/4-3,-60/2+3,0]){
+            cube([3,60,3]);
+        }
+        translate([w/4,-60/2+3,0]){
+            cube([3,60,3]);
+        }
+        translate([0,15-l/2,0]){
+            Fixings(58,23,7,dia=3);
+        }
+        translate([(w/2)-15,(l/2)-5,0]){
+            cylinder(10,d=3);
+        }
+        translate([-(w/2)+15,(l/2)-5,0]){
+            cylinder(10,d=3);
+        }
+        translate([(w/2)-15,-(l/2)+5,0]){
+            cylinder(10,d=3);
+        }
+        translate([-(w/2)+15,-(l/2)+5,0]){
+            cylinder(10,d=3);
+        }
+        translate([0,28  ,22/2+t]){
+            Battery();
+        }
+        rotate([0,0,45/2]){
+            cylinder(10,d=20,$fn=8);
+        }
+    }
+}
+
+//difference(){
+//    Chassis(65,120,3);
+//    DriveTrain(l=90,w=65);
+// }
+
+translate([0,0,20]){
+    PiPlate(65,120,3);
+}
+//*/

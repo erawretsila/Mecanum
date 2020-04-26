@@ -1,0 +1,18 @@
+difference(){
+    union(){
+        hull(){
+            cylinder(2,d=8);
+            translate([30,0,0]){
+                cylinder(2,d=2);
+            }
+        }
+        cylinder(10,d=8);
+    }
+    cylinder(10,d=3,$fn=12);
+    translate([0,0,8]){
+        cylinder(3,d=5.7,$fn=6);
+        rotate([0,0,90]){
+            cylinder(3,d=5.7,$fn=6);
+        }
+    }
+}

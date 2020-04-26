@@ -1,4 +1,5 @@
 use <MMMotor.scad>;
+
 module Fixings(w,l,t,dia=3){
     translate([-w/2,-l/2,0]){
         cylinder(t,d=dia);
@@ -49,109 +50,278 @@ module DriveTrain(l=50,w=60){
         }
     }
 }
+module FrontPlate(w,l){
+    difference(){
+        difference(){
+            translate([-(w-20)/2,l/2-8,0]){
+                cube([w-20,8,27.9]);
+                hull(){
+                    translate([-10,8,0]){
+                        cube([w,2,31]);
+                    }
+                //    cube([w,8,31]);
+                    translate([-5,8,6]){
+                        cube([w-10,10,19]);
+                    }
+                }
+            }
+        }
+        translate([-w/2,l/2-9,6]){
+            cube([w,11,18]);
+        }
+        translate([-(w-42)/2,l/2-10,0]){
+        cube([w-42,8,20]);
+        }
+        translate([-15,(l/2)-5,0]){
+            cylinder(60,d=3.5,$fn=12);
+        }
+        translate([+15,(l/2)-5,0]){
+            cylinder(60,d=3.5,$fn=12);
+        }
+        translate([0,l/2+3,15.5]){
+            rotate([-90,0,0]){
+                SR04();
+            }
+        }
+    }
+}
+module RearPlate(w,l){
+    difference(){
+        union(){
+            translate([-(w-20)/2,-l/2,0]){
+                cube([w-20,8,31]);
+                translate([-10,-5,-10]){
+                    cube([w,5,41]);
+                }
+            }
+        }
+        translate([-w/2,-l/2,6]){
+            cube([w,15,20]);
+        }
+        translate([-(w-42)/2,l/2-10,0]){
+        cube([w-42,8,26]);
+        }
+        translate([-15,-(l/2)+5,0]){
+            cylinder(60,d=3.5,$fn=12);
+        }
+        translate([+15,-(l/2)+5,0]){
+            cylinder(60,d=3.5,$fn=12);
+        }
+        translate([-22,-l/2,15]){
+            rotate([90,0,0]){
+                Switch();
+            }
+        }
+        translate([0,-l/2-5,-5]){
+            rotate([90,-90,180]){
+                MP2636();
+            }
+        }
+        translate([-(w-42)/2,-l/2,0]){
+            cube([w-42,15,15]);
+        }
+    }
+
+}
+
 module Chassis(w,l,T=3){
     difference(){
         union(){
             translate([-w/2,-l/2,0]){
                 cube([w,l,T]);
             }
-            translate([-65/2,-75/2,0]){
-                cube([65,75,7]);
-            }
-            translate([-(w-20)/2,l/2-8,0]){
-                cube([w-20,6,17+T]);
-            }
-            translate([-(w-20)/2,-l/2+2,0]){
-                cube([w-20,6,17+T]);
+            translate([-42/2,-75/2,0]){
+                cube([42,75,9]);
             }
                 
         }
         
         rotate([180,0,0]){
-            translate([0,0,-(18+T)]){
-                BatBox4AA();
+            translate([0,0,-(8+T)]){
+                LiPo2();
             }
         }
-        translate([(w/2)-15,(l/2)-5,0]){
-            cylinder(60,d=2.5,$fn=12);
+        rotate([0,0,45/2]){
+            cylinder(10,d=38,$fn=8);
         }
-        translate([-(w/2)+15,(l/2)-5,0]){
-            cylinder(60,d=2.5,$fn=12);
+        translate([-15,(l/2)-5,0]){
+            cylinder(60,d=3.5,$fn=12);
         }
-        translate([(w/2)-15,-(l/2)+5,0]){
-            cylinder(60,d=2.5,$fn=12);
+        translate([+15,(l/2)-5,0]){
+            cylinder(60,d=3.5,$fn=12);
         }
-        translate([-(w/2)+15,-(l/2)+5,0]){
-            cylinder(60,d=2.5,$fn=12);
+        translate([-15,-(l/2)+5,0]){
+            cylinder(60,d=3.5,$fn=12);
         }
+        translate([+15,-(l/2)+5,0]){
+            cylinder(60,d=3.5,$fn=12);
+        }
+    }
+}
+module CutOut(dia){
+    rotate([0,0,45/2]){
+        cylinder(15,d=dia,$fn=8);
     }
 }
 //WheelMotor();
 module PiPlate(w,l,t){
+    $fn=12;
     difference(){
         union(){
             translate([-w/2,-l/2,0]){
                 cube([w,l,t]);
             }
-            translate([0,15-l/2,0]){
-                Fixings(58,23,6,dia=7);
+
+            translate([0,-20,0]){
+                translate([0,0,0]){
+                    Fixings(58,23,15,dia=7,$fn=6);
+                }
+                Fixings(58,49,18,dia=7,$fn=6);
             }
-            translate([-12/2,l/4,10]){
-                minkowski(){
-                    cube([12,3,5+t]);
-                    rotate([90,0,0]){
-                        cylinder(3,r=10);
-                    }
+
+            translate([0,-15,t-1]){
+                rotate([0,0,90]){
+                    LiPo(z=7,b=2);
                 }
             }
-            translate([-12/2,-l/4+14,10]){
-                minkowski(){
-                    cube([12,5,5+t]);
-                    rotate([90,0,0]){
-                        cylinder(10,r=10);
-                    }
+          
+        }
+        translate([0,-15,t]){
+            rotate([0,0,90]){
+                LiPo();
+            }
+        }
+        translate([-20,40,t+.5]){
+            rotate([0,0,90]){
+                IMU();
+                translate([0,0,-5]){
+                    CutOut(20);
                 }
             }
         }
-        translate([-w/2,-l/2,15]){
-            cube([w,l,30]);
+        translate([20,40,t+.5]){
+            rotate([0,0,90]){
+                IMU();
+                translate([0,0,-5]){
+                    CutOut(20);
+                }
+            }
         }
-        translate([-w/4-3,-60/2+3,0]){
-            cube([3,60,3]);
+        translate([0,40,t+.5]){
+            rotate([0,0,90]){
+                IMU();
+                translate([0,0,-5]){
+                    CutOut(20);
+                }
+            }
         }
-        translate([w/4,-60/2+3,0]){
-            cube([3,60,3]);
+        translate([0,-20,0]){
+            Fixings(58,23,25,dia=2.4,$fn=12);
+            Fixings(58,49,25,dia=2.4,$fn=12);
         }
-        translate([0,15-l/2,0]){
-            Fixings(58,23,7,dia=3);
+        translate([-15,(l/2)-5,0]){
+            cylinder(10,d=3.5);
+            translate([-15,0,0]){
+                cylinder(10,d=3);
+                translate([0,-30,0]){
+                    cylinder(10,d=3);
+                }
+            }
         }
-        translate([(w/2)-15,(l/2)-5,0]){
-            cylinder(10,d=3);
+        translate([+15,(l/2)-5,0]){
+            cylinder(10,d=3.5);
+            translate([+15,0,0]){
+                cylinder(10,d=3);
+                translate([0,-30,0]){
+                    cylinder(10,d=3);
+                }
+            }
         }
-        translate([-(w/2)+15,(l/2)-5,0]){
-            cylinder(10,d=3);
+        translate([-15,-(l/2)+5,0]){
+            cylinder(10,d=3.5);
         }
-        translate([(w/2)-15,-(l/2)+5,0]){
-            cylinder(10,d=3);
+        translate([+15,-(l/2)+5,0]){
+            cylinder(10,d=3.5);
         }
-        translate([-(w/2)+15,-(l/2)+5,0]){
-            cylinder(10,d=3);
+
+        CutOut(30);
+        translate([0,-25/2,0]){
+            CutOut(32);
         }
-        translate([0,28  ,22/2+t]){
-            Battery();
+        translate([0,-25,0]){
+            CutOut(30);
         }
-        rotate([0,0,45/2]){
-            cylinder(10,d=20,$fn=8);
+        translate([-w/2+12,15,0]){
+            CutOut(10);
+            translate([-20,0,0]){
+                cube([20,2,10]);
+            }
+        }
+        translate([w/2-12,15 ,0]){
+            CutOut(10);
+            cube([20,2,10]);
+        }
+        translate([-w/2+8,-20,0]){
+            CutOut(10);
+        }
+        translate([w/2-8,-20,0]){
+            CutOut(10);
+        }
+        translate([-w/2+2,-20,0]){
+            CutOut(15);
+        }
+        translate([w/2-2,-20,0]){
+            CutOut(15);
         }
     }
 }
-
-//difference(){
-//    Chassis(65,120,3);
-//    DriveTrain(l=90,w=65);
-// }
-
-translate([0,0,20]){
-    PiPlate(65,120,3);
+/*/
+difference(){
+    FrontPlate(65,120);
+    Chassis(65,120,3)
+    DriveTrain(l=90,w=65);
+    translate([0,0,28]){
+        PiPlate(65,120,3);
+    }
 }
-//*/
+/*/
+
+difference(){
+    Chassis(65,120,3);
+    DriveTrain(l=90,w=65);
+}
+
+//FrontPlate(65,120);
+/*/
+difference(){
+    union(){
+    FrontPlate(65,120);
+//    RearPlate(65,120);
+    }
+    translate([0,0,28]){
+        PiPlate(65,120,3);
+    }
+    Chassis(65,120,3);
+}
+/*/
+/*/
+    translate([0,0,28]){
+        PiPlate(65,120,3);
+    }
+Chassis(65,120,3);
+/*/
+/*/
+w=65;
+T=3;
+difference(){
+        translate([-(w-20)/2,0,0]){
+                cube([w-20,6,4]);
+        }
+        translate([(w/2)-15,3,0]){
+            cylinder(60,d=3,$fn=12);
+        }
+        translate([-(w/2)+15,3,0]){
+            cylinder(60,d=3,$fn=12);
+        }
+    }
+/*/
